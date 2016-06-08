@@ -6,6 +6,7 @@
 package batepapo;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
@@ -33,13 +34,35 @@ public class BatepapoCliente {
         //Thread t=new Thread(entrada);
         //t.start();
         
+        if (s.isConnected()) {
+//            // cria uma conexao com o servidor e espera a msg
+//            InputStream con = s.getInputStream();
+//            // colocar o stream no formato de objeto
+//            ObjectInputStream entrada = new ObjectInputStream(con);
 
-        while (true) {
-            ObjectOutputStream saida = new ObjectOutputStream(s.getOutputStream());
-            //digitado=teclado.nextLine();
-            saida.writeObject(teclado.nextLine());
-            saida.flush();
+            new Thread(new BatepapoInput(s)).start();
             
+            while (true) {
+                ObjectOutputStream saidaTroca = new ObjectOutputStream(s.getOutputStream());
+                //digitado=teclado.nextLine();
+                System.out.println("Digite o índice do contato: ");
+                String msgTroca = teclado.nextLine();
+                saidaTroca.writeObject(msgTroca);
+                saidaTroca.flush();
+
+                String msg = "";
+                while (!msg.equals("sair")) {
+                    ObjectOutputStream saida = new ObjectOutputStream(s.getOutputStream());
+                    //digitado=teclado.nextLine();
+                    msg = teclado.nextLine();
+                    saida.writeObject(msg);
+                    saida.flush();
+
+                }
+            }
+        }
+        else {
+            System.out.println("Erro na conexão!");
         }
         
 

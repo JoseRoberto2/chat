@@ -7,6 +7,7 @@ package batepapo;
 
 import java.awt.List;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Array;
@@ -23,7 +24,8 @@ public class BatepapoServ {
 
     public final static int PortaSer=1234;
     
-    public static ArrayList<PrintStream> listaCli = new ArrayList<>();
+    public static ArrayList<OutputStream> listaCli = new ArrayList<>();
+    public static ArrayList<ArrayList<Object>> msgBuffer = new ArrayList<>();
     
             
     public static void main(String[] args) throws IOException {
@@ -32,8 +34,11 @@ public class BatepapoServ {
         
         System.out.println("Servidor Rodando");
         
-        int i=0;
+        //int i=0;
         
+                
+        new Thread(new Mensagens()).start();
+                
         Socket coneXliente;
         while(true){
             
@@ -41,10 +46,12 @@ public class BatepapoServ {
                 coneXliente= serv.accept();
                 System.out.println("conexão aceita");
                 
-                PrintStream ps = new PrintStream(coneXliente.getOutputStream());
+                OutputStream ps = coneXliente.getOutputStream();
+                int indiceCliente = listaCli.size();
                 boolean teste = listaCli.add(ps);
+                msgBuffer.add(new ArrayList<>());
                 
-                conexoes cli = new conexoes(coneXliente, listaCli);
+                conexoes cli = new conexoes(coneXliente, listaCli, msgBuffer, indiceCliente);
                 Thread roda = new Thread(cli);
                 roda.start();
 

@@ -7,7 +7,10 @@ package batepapo;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -20,11 +23,15 @@ import java.util.logging.Logger;
 public class conexoes implements Runnable{
     
     private Socket cliente=new Socket();
-    private ArrayList<PrintStream> listaCli;
+    private ArrayList<OutputStream> listaCli;
+    private ArrayList<ArrayList<Object>> msgBuffer;
+    private int meuIndice;
 
-    public conexoes(Socket cliente, ArrayList<PrintStream> listaCli){
+    public conexoes(Socket cliente, ArrayList<OutputStream> listaCli, ArrayList<ArrayList<Object>> msgBuffer, int meuIndice){
         this.cliente=cliente;
         this.listaCli=listaCli;
+        this.msgBuffer=msgBuffer;
+        this.meuIndice=meuIndice;
         //this.listaCli=new ArrayList<>()
     }
     
@@ -35,10 +42,22 @@ public class conexoes implements Runnable{
         while(true){
             
             try {
-                ObjectInputStream entrada;
+                ObjectInputStream entradaTroca;
                 //System.out.println("Nova conexao com o cliente " + this.cliente.getInetAddress().getHostAddress());
-                entrada = new ObjectInputStream(this.cliente.getInputStream());
-                System.out.println(entrada.readObject());
+                entradaTroca = new ObjectInputStream(this.cliente.getInputStream());
+                int indice = Integer.valueOf(entradaTroca.readObject().toString());
+                
+                String msg = "";
+                while (!msg.equals("sair")) {
+                    ObjectInputStream entrada;
+                    //System.out.println("Nova conexao com o cliente " + this.cliente.getInetAddress().getHostAddress());
+                    entrada = new ObjectInputStream(this.cliente.getInputStream());
+                    msg = "Cliente " + this.meuIndice + " disse: " + entrada.readObject().toString();
+                    System.out.println(msg);
+                    if (indice < msgBuffer.size()) {
+                        this.msgBuffer.get(indice).add(msg);
+                    }
+                }
                 
                 
                 
