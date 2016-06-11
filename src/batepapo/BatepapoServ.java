@@ -26,6 +26,7 @@ public class BatepapoServ {
     
     public static ArrayList<OutputStream> listaCli = new ArrayList<>();
     public static ArrayList<ArrayList<Object>> msgBuffer = new ArrayList<>();
+    public static ArrayList<String> nome = new ArrayList<>();
     
             
     public static void main(String[] args) throws IOException {
@@ -50,10 +51,9 @@ public class BatepapoServ {
                 int indiceCliente = listaCli.size();
                 boolean teste = listaCli.add(ps);
                 msgBuffer.add(new ArrayList<>());
-                
-                conexoes cli = new conexoes(coneXliente, listaCli, msgBuffer, indiceCliente);
-                Thread roda = new Thread(cli);
-                roda.start();
+                nome.add(coneXliente.getInetAddress().getHostName());
+
+                new Thread(new conexoes(coneXliente, listaCli, msgBuffer, indiceCliente)).start();
 
                 /*cli.Host=String.valueOf(coneXliente.getLocalAddress());
                 cli.Host=String.valueOf(coneXliente.getLocalSocketAddress());

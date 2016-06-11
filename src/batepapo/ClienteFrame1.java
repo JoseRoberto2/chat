@@ -22,7 +22,7 @@ import javax.swing.ListModel;
  *
  * @author Miklécio
  */
-public class ClienteFrame extends javax.swing.JFrame {
+public class ClienteFrame1 extends javax.swing.JFrame {
 
     /**
      * Creates new form ClienteFrame
@@ -33,7 +33,7 @@ public class ClienteFrame extends javax.swing.JFrame {
     private static char b='0';
     private String[] lista1;
     //String[] lista =new String[20];
-    public ClienteFrame() throws IOException, ClassNotFoundException {
+    public ClienteFrame1() throws IOException, ClassNotFoundException {
         initComponents();
         cliente();
         //Thread que atualiza as entradas
@@ -50,7 +50,7 @@ public class ClienteFrame extends javax.swing.JFrame {
                         leitura=entrada.readObject().toString();
                         historico+=leitura+"\n";
                     } catch (IOException | ClassNotFoundException ex) {
-                        Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(ClienteFrame1.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 painel2.setText(historico);
                }
@@ -187,7 +187,7 @@ public class ClienteFrame extends javax.swing.JFrame {
             painel1.setText("");
             painel2.setText(historico);
         } catch (IOException ex) {
-            Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClienteFrame1.class.getName()).log(Level.SEVERE, null, ex);
         }
                    
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -200,7 +200,7 @@ public class ClienteFrame extends javax.swing.JFrame {
             saidaTroca.writeObject(listagemCli.getSelectedIndex());
             saidaTroca.flush();
         } catch (IOException ex) {
-            Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClienteFrame1.class.getName()).log(Level.SEVERE, null, ex);
         }
         listagemCli.setEnabled(false);
         painel1.setVisible(true);
@@ -224,25 +224,26 @@ public class ClienteFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ClienteFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClienteFrame1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ClienteFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClienteFrame1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ClienteFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClienteFrame1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ClienteFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClienteFrame1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new ClienteFrame().setVisible(true);
+                    new ClienteFrame1().setVisible(true);
                 } catch (IOException ex) {
-                    Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ClienteFrame1.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ClienteFrame1.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
