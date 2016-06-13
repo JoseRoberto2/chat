@@ -35,7 +35,6 @@ public class BatepapoServ {
         
         System.out.println("Servidor Rodando");
         
-        //int i=0;
         
                 
         new Thread(new Mensagens()).start();
@@ -49,9 +48,12 @@ public class BatepapoServ {
                 
                 OutputStream ps = coneXliente.getOutputStream();
                 int indiceCliente = listaCli.size();
-                boolean teste = listaCli.add(ps);
+                listaCli.add(ps);
                 msgBuffer.add(new ArrayList<>());
                 nome.add(coneXliente.getInetAddress().getHostName());
+
+                
+
 
                 new Thread(new conexoes(coneXliente, listaCli, msgBuffer, indiceCliente)).start();
 

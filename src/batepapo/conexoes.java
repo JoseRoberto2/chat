@@ -34,40 +34,13 @@ public class conexoes implements Runnable{
         this.msgBuffer=msgBuffer;
         this.meuIndice=meuIndice;
         //this.listaCli=new ArrayList<>()
-        //this.nome=nome;
+        this.nome=BatepapoServ.nome;
     }
     
     @Override
     public void run() {
-        
-        
-        //recebe e resposnde a solicitação da nova conexão
-        ///ObjectInputStream solicitarClientes;
-        /*try {
-            /*
-            solicitarClientes = new ObjectInputStream(this.cliente.getInputStream());
-            String entradaindice=solicitarClientes.readObject().toString();
-            System.out.println(entradaindice);
-            *//*
-            ObjectOutputStream enviarClientes = new ObjectOutputStream(listaCli.get(listaCli.size()-1));
-            
-            String ClienteCon="";
-            for (String nome1 : BatepapoServ.nome) {
-                ClienteCon=nome1+"#";
-            }   
-            this.msgBuffer.get(listaCli.size()-1).add("Request#"+ClienteCon);
-            
-            //enviarClientes.writeObject("Request#"+ClienteCon);
-            enviarClientes.flush();
-            
-            
-        } catch (IOException ex) {
-            Logger.getLogger(conexoes.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        */       
-                
-        
-        
+        int cont=0;
+
         
         while(true){
             
@@ -85,12 +58,23 @@ public class conexoes implements Runnable{
                     //System.out.println("Nova conexao com o cliente " + this.cliente.getInetAddress().getHostAddress());
                     entrada = new ObjectInputStream(this.cliente.getInputStream());
                     msg = entrada.readObject().toString();
-
-                    msg = "Cliente " + this.meuIndice + " disse: " + msg;
-                    System.out.println(msg);
-                    if (indice < msgBuffer.size()) {
+                            
+                    //if("#RequeredClient".equals(msg)){
+                    //if(cont==1){  
+                        
+                        //System.out.println("aki");
+                        cont=0;
+                        ///msg="";
+                    //}
+                    //else{
+                        msg = nome.get(meuIndice) + " disse: " + msg;
+                        System.out.println(msg);
+                        if (indice < msgBuffer.size()) {
                             this.msgBuffer.get(indice).add(msg);
-                    }
+                        }
+                        msg="";
+                    //}
+                cont+=1;
                 }
                 
                 
@@ -98,6 +82,7 @@ public class conexoes implements Runnable{
             } catch (IOException | ClassNotFoundException ex) {
                 //Logger.getLogger(conexoes.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         }
         
         //this.cliente.close();

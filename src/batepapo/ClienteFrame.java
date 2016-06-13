@@ -30,8 +30,9 @@ public class ClienteFrame extends javax.swing.JFrame {
     private static String host = "127.0.0.3";
     private Socket s;
     private String historico="";
-    private static char b='0';
+    public static char b='0';
     private String[] lista1;
+    DefaultListModel<String> lista2 = new DefaultListModel<>();
     //String[] lista =new String[20];
     public ClienteFrame() throws IOException, ClassNotFoundException {
         initComponents();
@@ -40,19 +41,50 @@ public class ClienteFrame extends javax.swing.JFrame {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                
                 while(true){
-                    String leitura;
+                    String leitura="";
                     InputStream con;
                     try {
                         con = s.getInputStream();
                         // colocar o inputstream no formato de objeto
                         ObjectInputStream entrada = new ObjectInputStream(con);
                         leitura=entrada.readObject().toString();
-                        historico+=leitura+"\n";
+                        if(leitura.contains("#Requered")){
+                            lista1=leitura.split("#");
+                            lista2.clear();
+                            for(int i=2;i<lista1.length;i++){
+                                lista2.add(i-2,lista1[i]);
+                            }
+                            listagemCli.setModel(lista2);
+                        }
+                        else{
+                            historico+=leitura+"\n";
+                        }
                     } catch (IOException | ClassNotFoundException ex) {
                         Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                
                 painel2.setText(historico);
+                
+                
+                /*if(b=='1'){
+                    //atualiza a cada 3 segundos com os clientes conectados
+                    ObjectOutputStream requisitar;
+                    try {
+                        
+                        Thread.sleep(4000);
+                        requisitar = new ObjectOutputStream(s.getOutputStream());
+                        requisitar.writeObject("#RequeredClient");
+                        requisitar.flush();
+                    } catch (IOException ex) {
+                        Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }   catch (InterruptedException ex) {
+                            Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    
+                }*/
+                
                }
                 
             }
@@ -65,13 +97,14 @@ public class ClienteFrame extends javax.swing.JFrame {
         painel1.setVisible(false);
         s=new Socket(host, 1234);
         
+        
         if (s.isConnected()) {
             //adiciona os clientes a lista de clientes conectados
-            DefaultListModel<String> lista2 = new DefaultListModel<>();
-            for(int i=0;i<=3;i++){
+            
+            /*for(int i=0;i<=3;i++){
                 lista2.addElement("Cliente "+i);
             }
-            listagemCli.setModel(lista2);
+          listagemCli.setModel(lista2);*/
         }
         else {
             System.out.println("Erro na conexão!");
@@ -109,11 +142,6 @@ public class ClienteFrame extends javax.swing.JFrame {
             }
         });
 
-        listagemCli.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         listagemCli.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 listagemCliValueChanged(evt);
@@ -194,6 +222,7 @@ public class ClienteFrame extends javax.swing.JFrame {
 
     private void listagemCliValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listagemCliValueChanged
         ObjectOutputStream saidaTroca;
+        if(b=='0'){
         try {
             listagemCli.getSelectedIndex();
             saidaTroca = new ObjectOutputStream(s.getOutputStream());
@@ -205,6 +234,8 @@ public class ClienteFrame extends javax.swing.JFrame {
         listagemCli.setEnabled(false);
         painel1.setVisible(true);
         b='1';
+        //System.out.println(b);
+        }
     }//GEN-LAST:event_listagemCliValueChanged
 
     /**

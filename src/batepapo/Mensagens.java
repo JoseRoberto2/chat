@@ -8,12 +8,18 @@ package batepapo;
 import static batepapo.BatepapoServ.listaCli;
 import static batepapo.BatepapoServ.msgBuffer;
 import java.io.ObjectOutputStream;
-
+import java.util.ArrayList;
 /**
  *
  * @author Miklécio
  */
 public class Mensagens implements Runnable {
+    private ArrayList<String> nomes;
+    
+    
+    public Mensagens(){
+        nomes=BatepapoServ.nome;
+    }
     
     @Override
     public void run() {
@@ -27,6 +33,18 @@ public class Mensagens implements Runnable {
                     //if (coneXliente.getOutputStream() != this.listaCli.get(i)) {
                         // escrever a msg
                         //System.out.println("mensagens: " + msgBuffer.size());
+                    String Requered="";
+                    String msg;
+                    for(String nome1: nomes)
+                        Requered+="#"+nome1;
+                    msg="#Requered"+Requered;
+                    
+                    
+                    ObjectOutputStream broadcast = new ObjectOutputStream(listaCli.get(i));
+                    broadcast.writeObject(msg);
+                    broadcast.flush();
+
+                        
                     for (int j = 0; j < msgBuffer.get(i).size(); j++) {
                         ObjectOutputStream saida = new ObjectOutputStream(listaCli.get(i));
                         saida.writeObject(msgBuffer.get(i).get(j));
